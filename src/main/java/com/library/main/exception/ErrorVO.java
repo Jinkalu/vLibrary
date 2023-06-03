@@ -12,4 +12,12 @@ import lombok.NoArgsConstructor;
 public class ErrorVO {
     private String code;
     private String message;
+
+    @Override
+    public String toString() {
+        return "{ \n" +
+                "code : " + code +"\n"+
+                "message : " + message +"\n"+
+                '}';
+    }
 }
