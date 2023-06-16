@@ -4,10 +4,17 @@ import com.library.main.entity.Users;
 import com.library.main.exception.ErrorVO;
 import com.library.main.exception.ValidationException;
 import com.library.main.repo.UserRepository;
+import com.library.main.security.jwt.JWTService;
 import com.library.main.service.UserService;
+import com.library.main.vo.AuthResponse;
+import com.library.main.vo.UserRegVO;
 import com.library.main.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder encoder;
+    private final AuthenticationManager authenticationManager;
+    private final JWTService jwtService;
 
     @Override
     public void saveUsers(List<UserVO> userVOList) {
@@ -72,5 +81,17 @@ public class UserServiceImpl implements UserService {
 
     private Users mapToUser(UserVO userVO) {
         return modelMapper.map(userVO, Users.class);
+    }
+
+
+    @Override
+    public AuthResponse userAuth(UserRegVO request) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),
+                request.getPassword()));
+        var user = repository.findByEmail(request.getEmail())
+                .orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        return AuthResponse.builder()
+                .token(jwtService.generateToken(user))
+                .build();
     }
 }

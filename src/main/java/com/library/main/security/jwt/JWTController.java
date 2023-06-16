@@ -1,6 +1,10 @@
 package com.library.main.security.jwt;
 
+import com.library.main.service.UserService;
+import com.library.main.vo.AuthResponse;
+import com.library.main.vo.UserRegVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,18 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth/")
 public class JWTController {
 
-    private final JWTService jwtService;
-    private final AuthenticationManager authenticationManager;
+    private final UserService service;
 
     @PostMapping
-    public String getTokenForAuthenticatedUser(@RequestBody
-                                               JWTAuthenticationRequest authRequest) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(),
-                        authRequest.getPassword()));
-        if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(authRequest.getUserName());
-        }
-        throw new UsernameNotFoundException("INVALID USER CREDENTIALS");
+    public ResponseEntity<AuthResponse> userAuth(@RequestBody UserRegVO regVO){
+        return ResponseEntity.ok().body(service.userAuth(regVO));
     }
 }

@@ -1,5 +1,6 @@
 package com.library.main.security;
 
+import com.library.main.entity.Role;
 import com.library.main.security.jwt.JWTAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class LibrarySecurityConfig {
 
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationProvider authenticationProvider;
 
-    private final LibraryUserDetailsService userDetailsService;
 
     private static final String[] SECURED_URLs = {"/book/**"};
     private static final String[] UN_SECURED_URLs = {
@@ -41,32 +42,15 @@ public class LibrarySecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers(UN_SECURED_URLs).permitAll()
                 .and()
-                .authorizeHttpRequests().antMatchers(SECURED_URLs).hasAnyAuthority("ADMIN")
+                .authorizeHttpRequests().antMatchers(SECURED_URLs).hasAnyAuthority(Role.ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authenticationProvider(authenticationProvider())
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider(){
-        var authenticationProvider=new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
-        return authenticationProvider;
-    }
 
 }
