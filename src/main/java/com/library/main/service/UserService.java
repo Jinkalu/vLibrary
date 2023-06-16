@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface UserService {
     void saveUsers(List<UserVO> userVOList);
-
     UserVO findUserById(Long userId);
 
     void addUser(UserVO userVO);
