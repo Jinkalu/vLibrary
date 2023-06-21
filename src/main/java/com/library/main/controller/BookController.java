@@ -3,6 +3,7 @@ package com.library.main.controller;
 import com.library.main.service.BookService;
 import com.library.main.vo.BookResponse;
 import com.library.main.vo.SaveBookVO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+//@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/book/")
 public class BookController {
 

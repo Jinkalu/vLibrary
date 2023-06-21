@@ -1,6 +1,7 @@
 package com.library.main.controller;
 
 import com.library.main.service.UserService;
+import com.library.main.vo.AuthResponse;
 import com.library.main.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +28,8 @@ public class UserController {
     }
 
     @PostMapping("add-user")
-    public ResponseEntity<String> addUser(@RequestBody UserVO userVO){
-        service.addUser(userVO);
-        return ResponseEntity.accepted().body("USER_SAVED");
+    public ResponseEntity<AuthResponse> addUser(@RequestBody UserVO userVO){
+        return ResponseEntity.accepted().body(service.addUser(userVO));
     }
 
     @PostMapping("get-all-users")
