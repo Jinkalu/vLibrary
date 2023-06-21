@@ -22,7 +22,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
                 description = "security implementation",
                 termsOfService = "terms of service",
                 version = "2.0"),
-        security ={@SecurityRequirement(name = "bearerAuth")}
+        security =@SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(
         name = "bearerAuth",
@@ -31,6 +31,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
         bearerFormat = "JWT",
         in = SecuritySchemeIn.HEADER)
 public class SwaggerConfiguration {
+
     @Bean
     public Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
