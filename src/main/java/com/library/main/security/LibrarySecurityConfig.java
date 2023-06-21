@@ -1,6 +1,6 @@
 package com.library.main.security;
 
-import com.library.main.entity.Role;
+import com.library.main.enums.Role;
 import com.library.main.security.jwt.JWTAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

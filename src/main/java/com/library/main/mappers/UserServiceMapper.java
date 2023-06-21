@@ -1,7 +1,7 @@
 package com.library.main.mappers;
 
 import com.library.main.entity.Token;
-import com.library.main.entity.TokenType;
+import com.library.main.enums.TokenType;
 import com.library.main.entity.Users;
 
 /**

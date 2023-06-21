@@ -3,7 +3,6 @@ package com.library.main.service.impl;
 import com.library.main.entity.Books;
 import com.library.main.exception.ErrorVO;
 import com.library.main.exception.ValidationException;
-import com.library.main.mappers.BookMapper;
 import com.library.main.repo.BooksRepository;
 import com.library.main.service.BookService;
 import com.library.main.vo.BookResponse;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
+
     private final BooksRepository repository;
     private final ModelMapper modelMapper;
 

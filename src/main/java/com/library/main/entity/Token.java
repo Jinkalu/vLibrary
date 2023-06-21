@@ -1,5 +1,6 @@
 package com.library.main.entity;
 
+import com.library.main.enums.TokenType;
 import lombok.*;
 
 import javax.persistence.*;

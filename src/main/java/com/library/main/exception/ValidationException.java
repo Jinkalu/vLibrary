@@ -8,5 +8,4 @@ import java.util.List;
 @AllArgsConstructor
 public class ValidationException extends RuntimeException{
     private List<ErrorVO> errorVO;
-
 }

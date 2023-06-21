@@ -1,5 +1,6 @@
 package com.library.main.entity;
 
+import com.library.main.enums.Role;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
