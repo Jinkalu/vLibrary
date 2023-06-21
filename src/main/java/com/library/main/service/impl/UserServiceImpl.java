@@ -1,8 +1,6 @@
 package com.library.main.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.library.main.entity.Token;
-import com.library.main.entity.TokenType;
 import com.library.main.entity.Users;
 import com.library.main.exception.ErrorVO;
 import com.library.main.exception.ValidationException;
@@ -77,17 +75,6 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private void revokeAllUserTokens(Users users){
-        var validUserTokens=tokenRepository.findAllValidTokenByUser(users.getId());
-        if (!validUserTokens.isEmpty()){
-            validUserTokens.forEach(t->{
-                t.setRevoked(true);
-                t.setExpired(true);
-            });
-            tokenRepository.saveAll(validUserTokens);
-        }
-    }
-
 
     @Override
     public List<UserVO> listAllUsers() {
@@ -96,50 +83,6 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public AuthResponse userAuth(UserRegVO request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),
-                request.getPassword()));
-        var user = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        var accessToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        revokeAllUserTokens(user);
-       tokenRepository.save(UserServiceMapper.saveUserToken(user, accessToken));
-        return AuthResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-    }
-
-
-
-    @Override
-    public void refreshToken(HttpServletRequest request,
-                             HttpServletResponse response) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken;
-        final String userEmail;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return;
-        }
-        refreshToken = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(refreshToken);
-        if (userEmail != null) {
-            var userDetails = repository.findByEmail(userEmail)
-                    .orElseThrow();
-            if (jwtService.isTokenValid(refreshToken, userDetails)) {
-                var accessToken = jwtService.generateToken(userDetails);
-                revokeAllUserTokens(userDetails);
-                tokenRepository.save(UserServiceMapper.saveUserToken(userDetails, accessToken));
-                var authResponse = AuthResponse.builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
-                        .build();
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-            }
-        }
-    }
 
     private void validateUserByEmail(String email) {
         if (repository.findByEmail(email).isPresent()) {

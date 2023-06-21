@@ -31,7 +31,6 @@ public class LibrarySecurityConfig {
     private String[] UN_SECURED_URLs;
 
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()

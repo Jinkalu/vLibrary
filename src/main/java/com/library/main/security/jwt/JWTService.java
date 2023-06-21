@@ -15,7 +15,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
+/*
+*
+* Service class for creating and maintaining the jwt tokens
+*
+* */
 @Service
 @RequiredArgsConstructor
 public class JWTService {
