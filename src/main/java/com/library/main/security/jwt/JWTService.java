@@ -1,14 +1,10 @@
 package com.library.main.security.jwt;
 
-import com.library.main.exception.ErrorVO;
-import com.library.main.exception.ValidationException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,11 +13,8 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 /*
 *
@@ -97,13 +90,6 @@ public class JWTService {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        }
-//            return Jwts
-//                    .parserBuilder()
-//                    .setSigningKey(getSignKey())
-//                    .build()
-//                    .parseClaimsJws(token)
-//                    .getBody();
 
     }
 
