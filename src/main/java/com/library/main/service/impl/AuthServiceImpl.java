@@ -61,8 +61,8 @@ public class AuthServiceImpl implements AuthService {
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, userDetails)) {
                 var accessToken = jwtService.generateToken(userDetails);
-                revokeAllUserTokens(userDetails);
-                tokenRepository.save(UserServiceMapper.saveUserToken(userDetails, accessToken));
+//                revokeAllUserTokens(userDetails);
+//                tokenRepository.save(UserServiceMapper.saveUserToken(userDetails, accessToken));
                 var authResponse = AuthResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)

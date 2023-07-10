@@ -1,6 +1,5 @@
 package com.library.main.security;
 
-import com.library.main.enums.Role;
 import com.library.main.security.jwt.JWTAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+
+import static com.library.main.enums.Role.ADMIN;
 
 @Configuration
 @EnableWebSecurity
@@ -31,30 +32,13 @@ public class LibrarySecurityConfig {
     @Value("${urls.unsecured}")
     private String[] UN_SECURED_URLs;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        return http.csrf().disable()
-//                .authorizeHttpRequests()
-//                .antMatchers(UN_SECURED_URLs).permitAll()
-//                .and()
-//                .authorizeHttpRequests().antMatchers(SECURED_URLs).hasAnyAuthority(Role.ADMIN.name())
-//                .anyRequest().authenticated()
-//                .and()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .logout()
-//                .logoutUrl("/api/v1/auth/logout")
-//                .addLogoutHandler(logoutHandler)
-//                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-//                .and()
-//                .build();
+
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers(UN_SECURED_URLs).permitAll()
-                        .antMatchers(SECURED_URLs).hasAnyRole(Role.ADMIN.name())
+                        .antMatchers(SECURED_URLs).hasAuthority(ADMIN.name())
                         .anyRequest().authenticated())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

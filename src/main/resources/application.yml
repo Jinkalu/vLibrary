@@ -1,6 +1,4 @@
 spring:
-  unsecured:
-    urls: /book/get-book,/user/**,/auth/**,/v2/api-docs,/v3/api-docs,/v3/api-docs/**,/swagger-resources,/swagger-resources/**,/configuration/ui,/configuration/security,/swagger-ui/**,/swagger-ui.html
   jwt:
     secret: 36763979244226452948404D635166546A576D5A7134743777217A25432A462D
     jwtExpirationInMs: 1800000 # 30 minute

@@ -40,6 +40,7 @@ public class JWTService {
 
     public String generateToken(Map<String, Object> extraClaims,
                                 UserDetails userDetails) {
+
         return buildToken(extraClaims, userDetails, JWT_EXPIRATION_TIME_IN_MILLISECONDS);
     }
 
@@ -74,7 +75,7 @@ public class JWTService {
     }
 
     public String extractUsername(String token) {
-        return extractClaims(token, Claims::getSubject);
+      return extractClaims(token, Claims::getSubject);
     }
 
     public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
@@ -90,7 +91,6 @@ public class JWTService {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-
     }
 
     private Key getSignKey() {
