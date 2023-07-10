@@ -1,5 +1,6 @@
 package com.library.main.vo;
 
+import com.library.main.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +15,5 @@ public class UserVO {
     private String lastName;
     private String password;
     private String email;
-    private String role;
+    private Role role;
 }

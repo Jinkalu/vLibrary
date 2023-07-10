@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,15 +34,30 @@ public class LibrarySecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
-                .authorizeHttpRequests()
-                .antMatchers(UN_SECURED_URLs).permitAll()
-                .and()
-                .authorizeHttpRequests().antMatchers(SECURED_URLs).hasAnyAuthority(Role.ADMIN.name())
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+//        return http.csrf().disable()
+//                .authorizeHttpRequests()
+//                .antMatchers(UN_SECURED_URLs).permitAll()
+//                .and()
+//                .authorizeHttpRequests().antMatchers(SECURED_URLs).hasAnyAuthority(Role.ADMIN.name())
+//                .anyRequest().authenticated()
+//                .and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .logout()
+//                .logoutUrl("/api/v1/auth/logout")
+//                .addLogoutHandler(logoutHandler)
+//                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+//                .and()
+//                .build();
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .antMatchers(UN_SECURED_URLs).permitAll()
+                        .antMatchers(SECURED_URLs).hasAnyRole(Role.ADMIN.name())
+                        .anyRequest().authenticated())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
